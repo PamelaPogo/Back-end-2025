@@ -87,10 +87,6 @@ delete(@Param('id') id: number) {
   return `Hemos borrado el producto ${id}`;
 }
 
-//Usar QUERY
-@Get('query')
-rutaQuery(@Query() query) {
-  return query;
-}
+
 
 }
