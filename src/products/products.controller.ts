@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
 
 @Controller('products')
 export class ProductsController {
@@ -50,4 +50,47 @@ createProduct(
 ) {
   return `Creo el producto ${name} con descripción ${description}.`;
 }
+
+//Error 404
+@Get('ruta-error-404')
+@HttpCode(HttpStatus.NOT_FOUND)
+rutaConError404(){
+  return 'Esto es un error 404!! no existe'
+}
+
+//Decorador RES
+@Get(':ide')
+find(@Res() response, @Param('id') id:number){
+  if(id<100){
+    return response.status(HttpStatus.OK).send(`Pagina del producto: ${id}`);
+  } else{
+    return response.status(HttpStatus.NOT_FOUND).send(`producto inexistente`)
+  }
+}
+
+//Decorador PUT
+@Put(':id')
+update(@Param('id') id: number, @Body() body) {
+  return `Estás haciendo una operación de actualización del recurso ${id} con ${body.name} y ${body.description}`;
+}
+  
+//Decorador PATCH
+@Patch(':id')
+partialUpdate(@Param('id') id: number, @Body() body) {
+  return `Actualización parcial del ítem ${id}`;
+}
+
+//Decorador DELETE
+@Delete(':id')
+@HttpCode(HttpStatus.NO_CONTENT)
+delete(@Param('id') id: number) {
+  return `Hemos borrado el producto ${id}`;
+}
+
+//Usar QUERY
+@Get('query')
+rutaQuery(@Query() query) {
+  return query;
+}
+
 }
