@@ -1,7 +1,30 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
-
+import { ProductsService } from '../products/products.service';
+import { Product } from './interfaces/product/product.interface';
 @Controller('products')
 export class ProductsController {
+//PRODUCTO-SERVICIO
+  constructor (private readonly productsService: ProductsService){}
+
+  @Get()
+  getAllProducts(): Product[] {
+    return this.productsService.getAll();
+  }
+
+  @Post()
+  @HttpCode(204)
+  createProduct(
+    @Body('name') name: string,
+    @Body('description') description: string
+  ) {
+    this.productsService.insert({
+      id: this.productsService.getAll().length,
+      name,
+      description
+    });
+  }
+
+//INVENTARIOOOOOO
     @Get('inventario')
     getHelloInProduct(): string{
         return "Estamos en produccion"
@@ -43,13 +66,13 @@ export class ProductsController {
 //    }
 
 //Recibir datos Post del body por su nombre
-@Post()
-createProduct(
-  @Body('name') name: string, 
-  @Body('description') description: string
-) {
-  return `Creo el producto ${name} con descripción ${description}.`;
-}
+//@Post()
+//createProduct(
+//  @Body('name') name: string, 
+//  @Body('description') description: string
+//) {
+//    return `Creo el producto ${name} con descripción ${description}.`;
+//}
 
 //Error 404
 @Get('ruta-error-404')
