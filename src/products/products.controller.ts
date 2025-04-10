@@ -1,10 +1,51 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
 import { ProductsService } from '../products/products.service';
 import { Product } from './interfaces/product/product.interface';
+
+
 @Controller('products')
 export class ProductsController {
+
+  constructor(private readonly productsService: ProductsService) { }
+
+  //controlador GET
+  @Get()
+  getAllProducts(): Product[] {
+    return this.productsService.getAll();
+  }
+
+  @Get(':id')
+  find(@Param('id') id: number) {
+    return this.productsService.getId(id);
+  }
+
+  //CONTROLADOR POST
+  @Post()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  createProduct(
+    @Body() body,
+  ) {
+    this.productsService.insert(body);
+  }
+
+  //CONTROLADOR PUT
+  @Put(':id')
+  update(
+    @Param('id') id: number, 
+    @Body() body,
+  ) {
+    return this.productsService.update(id, body);
+  }
+
+//CONTROLADOR DELETE
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Param('id') id: number) {
+    this.productsService.delete(id);
+  }
+
 //PRODUCTO-SERVICIO
-  constructor (private readonly productsService: ProductsService){}
+ /*/ constructor (private readonly productsService: ProductsService){}
 
   @Get()
   getAllProducts(): Product[] {
@@ -108,8 +149,9 @@ partialUpdate(@Param('id') id: number, @Body() body) {
 @HttpCode(HttpStatus.NO_CONTENT)
 delete(@Param('id') id: number) {
   return `Hemos borrado el producto ${id}`;
-}
+}*/
 
 
 
 }
+
